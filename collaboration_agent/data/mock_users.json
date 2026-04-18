@@ -1,0 +1,38 @@
+[
+    {
+      "id": "u_2",
+      "name": "Sarah",
+      "role": "Frontend Engineer",
+      "skills": ["React", "TypeScript", "Tailwind", "Figma"],
+      "interests": ["AI", "EdTech", "Startups"],
+      "experienceLevel": "Intermediate",
+      "available": true
+    },
+    {
+      "id": "u_3",
+      "name": "David",
+      "role": "Backend Engineer",
+      "skills": ["Python", "FastAPI", "PostgreSQL", "Docker"],
+      "interests": ["AI", "SaaS", "Education"],
+      "experienceLevel": "Senior",
+      "available": true
+    },
+    {
+      "id": "u_4",
+      "name": "Nina",
+      "role": "ML Engineer",
+      "skills": ["Python", "PyTorch", "Recommendation Systems", "NLP"],
+      "interests": ["AI", "Research", "EdTech"],
+      "experienceLevel": "Intermediate",
+      "available": true
+    },
+    {
+      "id": "u_5",
+      "name": "Alex",
+      "role": "UI/UX Designer",
+      "skills": ["Figma", "Wireframing", "Prototyping", "User Research"],
+      "interests": ["Startups", "EdTech", "Product Design"],
+      "experienceLevel": "Junior",
+      "available": true
+    }
+  ]
