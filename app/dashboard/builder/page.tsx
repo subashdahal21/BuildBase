@@ -1,5 +1,5 @@
 'use client'
-
+import Link from 'next/link';
 import { useState } from 'react'
 
 // ── TYPES ────────────────────────────────────────────────────
@@ -540,6 +540,8 @@ export default function BuilderDashboard() {
 
 // ── PROJECT CARD ─────────────────────────────────────────────
 
+
+
 function ProjectCard({ project }: { project: Project }) {
   const [hov, setHov] = useState(false)
   const stg = STAGE[project.stage]
@@ -618,26 +620,31 @@ function ProjectCard({ project }: { project: Project }) {
 
         {/* Action buttons */}
         <div style={{ display: 'flex', gap: 8 }}>
-          <button
-            className="btn-outline"
-            style={{
-              padding: '7px 14px', borderRadius: 9,
-              background: 'transparent', border: '0.5px solid #7C5CFC60',
-              color: '#7C5CFC', fontSize: 12, fontWeight: 600,
-              cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-              transition: 'all 0.15s',
-            }}
-          >View Project</button>
-          <button
-            className="btn-fill"
-            style={{
-              padding: '7px 14px', borderRadius: 9,
-              background: '#7C5CFC', border: 'none',
-              color: '#fff', fontSize: 12, fontWeight: 600,
-              cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
-              transition: 'filter 0.15s',
-            }}
-          >Request to Join</button>
+          <Link href={`/dashboard/builder/${project.id}`}>
+            <button
+              className="btn-outline"
+              style={{
+                padding: '7px 14px', borderRadius: 9,
+                background: 'transparent', border: '0.5px solid #7C5CFC60',
+                color: '#7C5CFC', fontSize: 12, fontWeight: 600,
+                cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                transition: 'all 0.15s',
+              }}
+            >View Project</button>
+          </Link>
+          
+         <Link href={`/dashboard/builder/${project.id}`}>
+            <button
+              className="btn-fill"
+              style={{
+                padding: '7px 14px', borderRadius: 9,
+                background: '#7C5CFC', border: 'none',
+                color: '#fff', fontSize: 12, fontWeight: 600,
+                cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                transition: 'filter 0.15s',
+              }}
+            >Request to Join</button>
+          </Link>
         </div>
       </div>
     </div>

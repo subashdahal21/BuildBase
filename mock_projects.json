@@ -1,0 +1,14 @@
+[
+  {
+    "id": "neuralsearch",
+    "name": "NeuralSearch",
+    "tagline": "AI-powered semantic search...",
+    "commits": 127
+  },
+  {
+    "id": "finflow",
+    "name": "FinFlow",
+    "tagline": "Open-source personal finance...",
+    "commits": 85
+  }
+]
