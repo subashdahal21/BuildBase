@@ -1,26 +1,97 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0C0C12;
+  --foreground: #F0F0F8;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'DM Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
+
+input::placeholder {
+  color: #40405A;
+}
+
+input:focus {
+  outline: none;
+}
+
+.ob-input:focus {
+  border-color: #7C5CFC99 !important;
+  box-shadow: 0 0 0 3px #7C5CFC18;
+}
+
+.ob-scroll::-webkit-scrollbar { width: 4px; }
+.ob-scroll::-webkit-scrollbar-track { background: transparent; }
+.ob-scroll::-webkit-scrollbar-thumb { background: #3C3C60; border-radius: 99px; }
+
+/* Auth layout */
+.auth-left {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  padding: 44px 56px;
+  border-right: 0.5px solid rgba(255,255,255,0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .auth-left { display: flex; }
+}
+
+.auth-right {
+  width: 100%;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+}
+
+@media (min-width: 1024px) {
+  .auth-right {
+    width: 520px;
+    min-height: unset;
+    padding: 56px 48px;
+  }
+}
+
+/* Role card hover */
+.role-card {
+  transition: all 0.2s ease;
+}
+
+/* Auth button hover */
+.auth-btn-primary:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+
+.auth-btn-secondary:hover {
+  background: #202030 !important;
+  border-color: rgba(255,255,255,0.15) !important;
+}
+
+/* Floating card subtle entry */
+.float-card {
+  animation: floatIn 0.6s ease both;
+}
+.float-card:nth-child(2) { animation-delay: 0.1s; }
+.float-card:nth-child(3) { animation-delay: 0.2s; }
+
+@keyframes floatIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin { to { transform: rotate(360deg) } }
