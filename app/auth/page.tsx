@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import RoleSelect from '@/app/auth/RoleSelect'
 import SignUp from '@/app/auth/SignUp'
@@ -10,12 +11,17 @@ export type AuthView = 'role' | 'signup' | 'signin'
 
 export default function AuthPage() {
   const [view, setView] = useState<AuthView>('role')
+  const router = useRouter()
   const [role, setRole] = useState<Role>(null)
 
-  const handleRoleSelect = (selected: Role) => {
-    setRole(selected)
-    setView('signup')
+ const handleRoleSelect = (selected: Role) => {
+  setRole(selected)
+  if (selected === 'investor') {
+    router.push('/dashboard/investor')
+  } else {
+    router.push('/dashboard/builder')
   }
+}
 
   return (
     <main style={{ display: 'flex', minHeight: '100dvh', background: '#0C0C12', fontFamily: "'DM Sans', sans-serif" }}>
