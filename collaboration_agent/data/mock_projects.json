@@ -1,0 +1,38 @@
+[
+    {
+      "id": "p_101",
+      "title": "ResearchBridge",
+      "summary": "An AI platform matching students with research opportunities.",
+      "domainTags": ["AI", "EdTech", "Student Productivity"],
+      "projectStage": "Idea",
+      "targetUsers": ["Students", "Professors", "Research Labs"],
+      "technologies": ["Python", "React", "Recommendation Systems"],
+      "teamRolesFilled": ["Backend Engineer"],
+      "requiredRoles": ["Frontend Engineer", "ML Engineer", "UI/UX Designer"],
+      "lookingForFunding": true
+    },
+    {
+      "id": "p_102",
+      "title": "DermAssist",
+      "summary": "A skin condition screening tool using image analysis and dermatologist discovery.",
+      "domainTags": ["AI", "HealthTech", "Computer Vision"],
+      "projectStage": "MVP",
+      "targetUsers": ["Patients", "Dermatologists"],
+      "technologies": ["Python", "PyTorch", "Computer Vision", "Mobile App"],
+      "teamRolesFilled": ["ML Engineer", "Backend Engineer"],
+      "requiredRoles": ["Frontend Engineer", "Mobile Developer"],
+      "lookingForFunding": true
+    },
+    {
+      "id": "p_103",
+      "title": "Earnify",
+      "summary": "A productivity and self-discipline platform with rewards and progress tracking.",
+      "domainTags": ["Productivity", "SaaS", "Behavior Tech"],
+      "projectStage": "Prototype",
+      "targetUsers": ["Students", "Professionals"],
+      "technologies": ["Spring Boot", "React", "MySQL"],
+      "teamRolesFilled": ["Backend Engineer", "Frontend Engineer"],
+      "requiredRoles": ["UI/UX Designer"],
+      "lookingForFunding": true
+    }
+  ]

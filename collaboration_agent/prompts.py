@@ -58,3 +58,49 @@ Required skills:
 Matched collaborator profile:
 {user_profile}
 """
+
+INVESTOR_ANALYSIS_PROMPT = """
+You are an AI investment preference analyst.
+
+Return VALID JSON only with this exact shape:
+{{
+  "preferredSectors": ["string"],
+  "preferredStages": ["string"],
+  "preferredTechnologies": ["string"],
+  "targetMarkets": ["string"],
+  "riskAppetite": "string",
+  "investmentStyle": "string"
+}}
+
+Rules:
+- Return only JSON
+- No markdown
+- No explanation
+- Infer concise investor preferences from the text
+- preferredStages should use values like: Idea, Prototype, MVP, Early Traction
+
+Investor profile text:
+{investor_text}
+"""
+
+INVESTOR_NOTE_PROMPT = """
+You are generating a short investor-project fit explanation.
+
+Return VALID JSON only with this exact shape:
+{{
+  "investmentNote": "string"
+}}
+
+Rules:
+- Return only JSON
+- No markdown
+- No explanation
+- Keep it under 70 words
+- Explain why this project may fit the investor's interests
+
+Investor preferences:
+{investor_preferences}
+
+Project:
+{project_profile}
+"""

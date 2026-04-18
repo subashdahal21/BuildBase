@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from schemas import ProjectRequest
 from agent_runner import run_collaboration_agent
+from schemas import InvestorRequest
+from investor_agent import run_investor_agent
 
 app = FastAPI(title="ConnectPro Collaboration Agent")
 
@@ -17,3 +19,7 @@ def run_agent(request: ProjectRequest):
         founder_id=request.founderId,
         project_id=request.projectId
     )
+
+@app.post("/run-investor-agent")
+def run_investor(request: InvestorRequest):
+    return run_investor_agent(request.investorText)

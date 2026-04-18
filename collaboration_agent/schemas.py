@@ -52,3 +52,37 @@ class RankedMatch(BaseModel):
     subject: str
     message: str
     status: str
+
+
+class InvestorRequest(BaseModel):
+    investorText: str
+
+
+class InvestorAnalysis(BaseModel):
+    preferredSectors: List[str]
+    preferredStages: List[str]
+    preferredTechnologies: List[str]
+    targetMarkets: List[str]
+    riskAppetite: str
+    investmentStyle: str
+
+
+class ProjectProfile(BaseModel):
+    id: str
+    title: str
+    summary: str
+    domainTags: List[str]
+    projectStage: str
+    targetUsers: List[str]
+    technologies: List[str]
+    teamRolesFilled: List[str]
+    requiredRoles: List[str]
+    lookingForFunding: bool
+
+
+class InvestorProjectMatch(BaseModel):
+    projectId: str
+    title: str
+    score: float
+    reasons: List[str]
+    investmentNote: str

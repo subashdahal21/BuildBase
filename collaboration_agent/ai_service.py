@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 
 from schemas import ProjectAnalysis, InviteMessage
 from prompts import PROJECT_ANALYSIS_PROMPT, COLLAB_INVITE_PROMPT
+from schemas import InvestorAnalysis
+from prompts import INVESTOR_ANALYSIS_PROMPT, INVESTOR_NOTE_PROMPT
 
 load_dotenv()
 
@@ -84,3 +86,52 @@ def generate_invite_message(project_analysis: ProjectAnalysis, user_profile: dic
     parsed = extract_json(content)
 
     return InviteMessage(**parsed)
+
+
+def analyze_investor(investor_text: str) -> InvestorAnalysis:
+    prompt = INVESTOR_ANALYSIS_PROMPT.format(investor_text=investor_text)
+
+    response = client.chat.completions.create(
+        model=MODEL_NAME,
+        temperature=0.2,
+        messages=[
+            {
+                "role": "system",
+                "content": "You extract investor preferences. Return ONLY JSON."
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ]
+    )
+
+    content = response.choices[0].message.content
+    parsed = extract_json(content)
+    return InvestorAnalysis(**parsed)
+
+
+def generate_investor_note(investor_analysis: InvestorAnalysis, project_profile: dict) -> str:
+    prompt = INVESTOR_NOTE_PROMPT.format(
+        investor_preferences=json.dumps(investor_analysis.model_dump()),
+        project_profile=json.dumps(project_profile)
+    )
+
+    response = client.chat.completions.create(
+        model=MODEL_NAME,
+        temperature=0.4,
+        messages=[
+            {
+                "role": "system",
+                "content": "You write short investor fit notes. Return ONLY JSON."
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ]
+    )
+
+    content = response.choices[0].message.content
+    parsed = extract_json(content)
+    return parsed["investmentNote"]
