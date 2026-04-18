@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { supabase } from '@/lib/supabase'
 
 type View = 'signup' | 'signin'
 
@@ -50,11 +51,26 @@ function InvestorSignUp({ onSwitch }: { onSwitch: () => void }) {
   const [form, setForm] = useState({ name: '', email: '', password: '', range: '' })
   const [focused, setFocused] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    await new Promise(r => setTimeout(r, 1000))
+    setError('')
+
+    const { data, error: authError } = await supabase.auth.signUp({
+      email: form.email,
+      password: form.password,
+      options: { data: { full_name: form.name, role: 'investor', investment_range: form.range } },
+    })
+
+    if (authError) {
+      setError(authError.message)
+      setLoading(false)
+      return
+    }
+
+    if (data.user) localStorage.setItem('userId', data.user.id)
     localStorage.setItem('userRole', 'investor')
     localStorage.setItem('signupName', form.name)
     router.push('/onboarding/investor')
@@ -98,6 +114,12 @@ function InvestorSignUp({ onSwitch }: { onSwitch: () => void }) {
           Discover and fund the next generation of builders.
         </p>
       </div>
+
+      {error && (
+        <div style={{ background: '#FF4D4D18', border: '1px solid #FF4D4D40', borderRadius: 10, padding: '10px 14px', fontSize: 13, color: '#FF6B6B', marginBottom: 8 }}>
+          {error}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         <div>
@@ -184,11 +206,25 @@ function InvestorSignIn({ onSwitch }: { onSwitch: () => void }) {
   const [form, setForm] = useState({ email: '', password: '' })
   const [focused, setFocused] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    await new Promise(r => setTimeout(r, 1000))
+    setError('')
+
+    const { data, error: authError } = await supabase.auth.signInWithPassword({
+      email: form.email,
+      password: form.password,
+    })
+
+    if (authError) {
+      setError(authError.message)
+      setLoading(false)
+      return
+    }
+
+    if (data.user) localStorage.setItem('userId', data.user.id)
     localStorage.setItem('userRole', 'investor')
     router.push('/dashboard/investor')
   }
@@ -231,6 +267,12 @@ function InvestorSignIn({ onSwitch }: { onSwitch: () => void }) {
           Sign in to your investor portal.
         </p>
       </div>
+
+      {error && (
+        <div style={{ background: '#FF4D4D18', border: '1px solid #FF4D4D40', borderRadius: 10, padding: '10px 14px', fontSize: 13, color: '#FF6B6B', marginBottom: 8 }}>
+          {error}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         <div>

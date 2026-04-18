@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { supabase } from '@/lib/supabase'
 
 type View = 'signup' | 'signin'
 
@@ -59,6 +60,7 @@ function BuilderSignUp({ onSwitch }: { onSwitch: () => void }) {
   const [focused, setFocused] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [githubLoading, setGithubLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const handleGithub = async () => {
     setGithubLoading(true)
@@ -71,7 +73,21 @@ function BuilderSignUp({ onSwitch }: { onSwitch: () => void }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    await new Promise(r => setTimeout(r, 1000))
+    setError('')
+
+    const { data, error: authError } = await supabase.auth.signUp({
+      email: form.email,
+      password: form.password,
+      options: { data: { full_name: form.name, role: 'builder' } },
+    })
+
+    if (authError) {
+      setError(authError.message)
+      setLoading(false)
+      return
+    }
+
+    if (data.user) localStorage.setItem('userId', data.user.id)
     localStorage.setItem('userRole', 'builder')
     localStorage.setItem('signupName', form.name)
     router.push('/onboarding/builder')
@@ -141,6 +157,12 @@ function BuilderSignUp({ onSwitch }: { onSwitch: () => void }) {
         <span style={{ fontSize: 12, color: '#40405A', letterSpacing: '0.05em' }}>OR</span>
         <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
       </div>
+
+      {error && (
+        <div style={{ background: '#FF4D4D18', border: '1px solid #FF4D4D40', borderRadius: 10, padding: '10px 14px', fontSize: 13, color: '#FF6B6B', marginBottom: 8 }}>
+          {error}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         <div>
@@ -217,6 +239,7 @@ function BuilderSignIn({ onSwitch }: { onSwitch: () => void }) {
   const [focused, setFocused] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [githubLoading, setGithubLoading] = useState(false)
+  const [error, setError] = useState('')
 
   const handleGithub = async () => {
     setGithubLoading(true)
@@ -228,7 +251,20 @@ function BuilderSignIn({ onSwitch }: { onSwitch: () => void }) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    await new Promise(r => setTimeout(r, 1000))
+    setError('')
+
+    const { data, error: authError } = await supabase.auth.signInWithPassword({
+      email: form.email,
+      password: form.password,
+    })
+
+    if (authError) {
+      setError(authError.message)
+      setLoading(false)
+      return
+    }
+
+    if (data.user) localStorage.setItem('userId', data.user.id)
     localStorage.setItem('userRole', 'builder')
     router.push('/dashboard/builder')
   }
@@ -296,6 +332,12 @@ function BuilderSignIn({ onSwitch }: { onSwitch: () => void }) {
         <span style={{ fontSize: 12, color: '#40405A', letterSpacing: '0.05em' }}>OR</span>
         <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.06)' }} />
       </div>
+
+      {error && (
+        <div style={{ background: '#FF4D4D18', border: '1px solid #FF4D4D40', borderRadius: 10, padding: '10px 14px', fontSize: 13, color: '#FF6B6B', marginBottom: 8 }}>
+          {error}
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         <div>

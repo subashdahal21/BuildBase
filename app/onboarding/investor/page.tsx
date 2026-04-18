@@ -52,7 +52,21 @@ export default function InvestorOnboardingPage() {
   const update = (partial: Partial<InvestorOnboardingData>) =>
     setData(d => ({ ...d, ...partial }))
 
-  const next = () => step < TOTAL_STEPS ? setStep(s => s + 1) : setDone(true)
+  const next = () => {
+    if (step < TOTAL_STEPS) {
+      setStep(s => s + 1)
+      return
+    }
+    const userId = localStorage.getItem('userId')
+    if (userId) {
+      fetch('/api/onboarding/investor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, data }),
+      }).catch(() => {})
+    }
+    setDone(true)
+  }
   const back = () => setStep(s => s - 1)
 
   if (done) return <StepDone data={data} />
