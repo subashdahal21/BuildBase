@@ -6,25 +6,42 @@ from request_service import send_collaboration_request
 BACKEND_BASE_URL = "http://localhost:3000"
 
 
-def fetch_ranked_users_from_backend(project_id: str):
-    response = requests.get(
+def fetch_candidate_users_from_backend(
+    founder_id: str,
+    project_id: str,
+    required_roles: list[str],
+    required_skills: list[str]
+):
+    payload = {
+        "founderId": founder_id,
+        "projectId": project_id,
+        "requiredRoles": required_roles,
+        "requiredSkills": required_skills
+    }
+
+    response = requests.post(
         f"{BACKEND_BASE_URL}/api/match",
-        params={"projectId": project_id},
+        json=payload,
         timeout=15
     )
     response.raise_for_status()
 
     data = response.json()
+    print("BACKEND RESPONSE:", data)
     return data.get("matches", [])
 
 
 def run_collaboration_agent(project_text: str, founder_id: str, project_id: str):
     analysis = analyze_project(project_text)
 
-    # Fetch ranked users from backend instead of local mock file
-    backend_matches = fetch_ranked_users_from_backend(project_id)
-    top_matches = backend_matches[:5]
+    backend_matches = fetch_candidate_users_from_backend(
+        founder_id=founder_id,
+        project_id=project_id,
+        required_roles=analysis.requiredRoles,
+        required_skills=analysis.requiredSkills
+    )
 
+    top_matches = backend_matches[:5]
     sent_requests = []
 
     for match in top_matches:
@@ -51,8 +68,8 @@ def run_collaboration_agent(project_text: str, founder_id: str, project_id: str)
         sent_requests.append({
             "userId": match["id"],
             "name": match["name"],
-            "role": match["role"],
-            "score": match["score"],
+            "role": match.get("role"),
+            "score": match.get("score"),
             "reasons": reasons,
             "subject": saved_request.subject,
             "message": saved_request.message,
