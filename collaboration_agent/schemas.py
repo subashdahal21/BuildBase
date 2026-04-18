@@ -1,6 +1,9 @@
 from pydantic import BaseModel, Field
 from typing import List, Literal
 
+ 
+class ProjectTextRequest(BaseModel):
+    projectText: str = Field(..., min_length=10)
 
 class ProjectRequest(BaseModel):
     projectText: str = Field(..., min_length=10)

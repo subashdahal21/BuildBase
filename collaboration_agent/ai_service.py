@@ -46,6 +46,7 @@ def analyze_project(project_text: str) -> ProjectAnalysis:
         content = response.choices[0].message.content
         parsed = extract_json(content)
         return ProjectAnalysis(**parsed)
+    
     except Exception:
         return ProjectAnalysis(
             projectType="Unknown",
