@@ -5,16 +5,15 @@ import { Role } from '@/app/auth/page'
 
 interface Props {
   onSelect: (role: Role) => void
-  onSignIn: () => void
 }
 
-export default function RoleSelect({ onSelect, onSignIn }: Props) {
+export default function RoleSelect({ onSelect }: Props) {
   const [hovered, setHovered] = useState<Role>(null)
 
   const cards = [
     {
       role: 'builder' as Role,
-      title: "I'm a Builder",
+      title: "I'm a User/Builder",
       desc: 'Develop projects, join teams, and get your work in front of investors.',
       color: '#7C5CFC',
       perks: ['Post & discover projects', 'AI-matched collaboration', 'GitHub activity tracking'],
@@ -43,8 +42,6 @@ export default function RoleSelect({ onSelect, onSignIn }: Props) {
 
   return (
     <div style={{ width: '100%', maxWidth: 460 }}>
-
-      {/* Mobile logo — only shows when left panel is hidden */}
       <div className="lg:hidden" style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 36 }}>
         <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
           <rect width="32" height="32" rx="8" fill="#1C1C28" />
@@ -57,16 +54,11 @@ export default function RoleSelect({ onSelect, onSignIn }: Props) {
         </span>
       </div>
 
-      {/* Header */}
       <div style={{ marginBottom: 32 }}>
         <h2 style={{
           fontFamily: "'Cabinet Grotesk', sans-serif",
-          fontSize: 'clamp(26px, 4vw, 32px)',
-          fontWeight: 900,
-          color: '#F0F0F8',
-          marginBottom: 8,
-          letterSpacing: '-0.5px',
-          lineHeight: 1.15,
+          fontSize: 'clamp(26px, 4vw, 32px)', fontWeight: 900, color: '#F0F0F8',
+          marginBottom: 8, letterSpacing: '-0.5px', lineHeight: 1.15,
         }}>
           Join Buildbase
         </h2>
@@ -75,7 +67,6 @@ export default function RoleSelect({ onSelect, onSignIn }: Props) {
         </p>
       </div>
 
-      {/* Role cards */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 28 }}>
         {cards.map(c => {
           const isHov = hovered === c.role
@@ -89,20 +80,16 @@ export default function RoleSelect({ onSelect, onSignIn }: Props) {
               style={{
                 background: isHov ? '#1A1A2A' : '#13131E',
                 border: `1px solid ${isHov ? c.color + '60' : 'rgba(255,255,255,0.07)'}`,
-                borderRadius: 18,
-                padding: '22px 22px',
-                cursor: 'pointer',
+                borderRadius: 18, padding: '22px 22px', cursor: 'pointer',
                 boxShadow: isHov ? `0 0 0 1px ${c.color}20, 0 8px 32px rgba(0,0,0,0.3)` : '0 2px 12px rgba(0,0,0,0.2)',
+                transition: 'all 0.2s',
               }}
             >
-              {/* Icon + title */}
               <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, marginBottom: 16 }}>
                 <div style={{
                   width: 48, height: 48, borderRadius: 14,
-                  background: c.color + '18',
-                  border: `1px solid ${c.color}30`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  flexShrink: 0,
+                  background: c.color + '18', border: `1px solid ${c.color}30`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                 }}>
                   {c.icon}
                 </div>
@@ -116,7 +103,6 @@ export default function RoleSelect({ onSelect, onSignIn }: Props) {
                 </div>
               </div>
 
-              {/* Perks */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 7, marginBottom: 18 }}>
                 {c.perks.map(p => (
                   <div key={p} style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
@@ -126,39 +112,24 @@ export default function RoleSelect({ onSelect, onSignIn }: Props) {
                 ))}
               </div>
 
-              {/* CTA */}
               <div style={{
-                padding: '11px 0',
-                borderRadius: 12,
+                padding: '11px 0', borderRadius: 12,
                 background: isHov ? c.color : 'transparent',
                 border: `1px solid ${isHov ? c.color : c.color + '60'}`,
                 color: isHov ? '#fff' : c.color,
-                fontSize: 14,
-                fontWeight: 600,
-                textAlign: 'center',
-                transition: 'all 0.2s',
-                letterSpacing: '0.01em',
+                fontSize: 14, fontWeight: 600, textAlign: 'center',
+                transition: 'all 0.2s', letterSpacing: '0.01em',
               }}>
-                Continue as {c.role === 'builder' ? 'Builder' : 'Investor'} →
+                Continue as {c.role === 'builder' ? 'User/Builder' : 'Investor'} →
               </div>
             </div>
           )
         })}
       </div>
 
-      {/* Sign in link */}
-      <p style={{ fontSize: 15, color: '#7070A0', textAlign: 'center' }}>
+      <p style={{ fontSize: 14, color: '#5050A0', textAlign: 'center' }}>
         Already have an account?{' '}
-        <button
-          onClick={onSignIn}
-          style={{
-            background: 'none', border: 'none', color: '#7C5CFC',
-            fontSize: 15, cursor: 'pointer',
-            fontFamily: "'DM Sans', sans-serif", fontWeight: 600, padding: 0,
-          }}
-        >
-          Sign in
-        </button>
+        <a href="/auth/builder" style={{ color: '#7C5CFC', fontWeight: 600, textDecoration: 'none' }}>Sign in</a>
       </p>
     </div>
   )
