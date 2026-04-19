@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { supabase } from '@/lib/supabase'
 
 type NavId = 'dealflow' | 'portfolio' | 'saved' | 'messages' | 'profile'
 type ProjectTab = 'overview' | 'team' | 'commits' | 'invest' | 'messages'
@@ -652,6 +653,25 @@ export default function InvestorDashboard() {
   const [selectedProject, setSelectedProject] = useState<typeof STARTUPS[0] | null>(null)
   const [msgThread, setMsgThread] = useState<typeof MESSAGES_DATA[0] | null>(null)
   const [newMsg, setNewMsg] = useState('')
+  const [userProfile, setUserProfile] = useState<{ full_name: string; email: string } | null>(null)
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      if (!data.user) return
+      const email = data.user.email ?? ''
+      supabase.from('profiles').select('full_name').eq('id', data.user.id).single().then(({ data: profile }) => {
+        setUserProfile({ full_name: profile?.full_name ?? email, email })
+      })
+    })
+  }, [])
+
+  const fullName = userProfile?.full_name ?? ''
+  const nameParts = fullName.trim().split(' ')
+  const firstName = nameParts[0] ?? ''
+  const lastInitial = nameParts[1]?.[0] ? ` ${nameParts[1][0]}.` : ''
+  const shortName = firstName + lastInitial
+  const initials = (firstName[0] ?? '') + (nameParts[1]?.[0] ?? '')
+  const userEmail = userProfile?.email ?? ''
 
   const navItems = [
     { id: 'dealflow' as NavId, label: 'Deal Flow', icon: <Icon.DealFlow /> },
@@ -701,9 +721,9 @@ export default function InvestorDashboard() {
               background: ACCENT + '20', border: `1.5px solid ${ACCENT}45`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: 11, fontWeight: 700, color: ACCENT,
-            }}>MN</div>
+            }}>{initials || '?'}</div>
             <div style={{ minWidth: 0 }}>
-              <div style={{ fontSize: 13, fontWeight: 600, color: '#E0E0F0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>Mahesh N.</div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: '#E0E0F0', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{shortName || '...'}</div>
               <div style={{
                 marginTop: 3, display: 'inline-block',
                 background: ACCENT + '15', border: `0.5px solid ${ACCENT}30`,
@@ -808,7 +828,7 @@ export default function InvestorDashboard() {
               background: ACCENT + '20', border: `1.5px solid ${ACCENT}40`,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: 11, fontWeight: 700, color: ACCENT,
-            }}>MN</div>
+            }}>{initials || '?'}</div>
           </div>
         </div>
 
@@ -819,7 +839,7 @@ export default function InvestorDashboard() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
                 <p style={{ fontSize: 13, color: '#50508A' }}>
-                  Welcome back, Mahesh 👋 — <span style={{ color: ACCENT }}>3 new projects match your thesis</span>
+                  Welcome back, {firstName || 'there'} 👋 — <span style={{ color: ACCENT }}>3 new projects match your thesis</span>
                 </p>
                 <div style={{ display: 'flex', gap: 7 }}>
                   {['All', 'AI/ML', 'FinTech', 'EdTech'].map(f => (
@@ -1034,16 +1054,16 @@ export default function InvestorDashboard() {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: 18, fontWeight: 800, color: ACCENT,
                   fontFamily: "'Cabinet Grotesk', sans-serif",
-                }}>MN</div>
+                }}>{initials || '?'}</div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 20, fontWeight: 800, color: '#F0F0F8', fontFamily: "'Cabinet Grotesk', sans-serif", marginBottom: 6 }}>Mahesh Neupane</div>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: '#F0F0F8', fontFamily: "'Cabinet Grotesk', sans-serif", marginBottom: 6 }}>{fullName || '...'}</div>
                   <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                     <span style={{
                       background: ACCENT + '15', border: `0.5px solid ${ACCENT}30`,
                       borderRadius: 999, padding: '2px 10px',
                       fontSize: 10, fontWeight: 700, color: ACCENT,
                     }}>Investor</span>
-                    <span style={{ fontSize: 12, color: '#40405A' }}>maheshneupane96@gmail.com</span>
+                    <span style={{ fontSize: 12, color: '#40405A' }}>{userEmail}</span>
                   </div>
                 </div>
                 <button style={{

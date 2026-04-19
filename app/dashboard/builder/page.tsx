@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { supabase } from '@/lib/supabase'
 
 type NavId = 'feed' | 'projects' | 'collab' | 'messages' | 'profile'
 
@@ -560,6 +561,25 @@ export default function BuilderDashboard() {
   const [selectedProject, setSelectedProject] = useState<typeof PROJECTS[0] | null>(null)
   const [msgThread, setMsgThread] = useState<typeof MESSAGES_LIST[0] | null>(null)
   const [newMsg, setNewMsg] = useState('')
+  const [userProfile, setUserProfile] = useState<{ full_name: string; email: string } | null>(null)
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      if (!data.user) return
+      const email = data.user.email ?? ''
+      supabase.from('profiles').select('full_name').eq('id', data.user.id).single().then(({ data: profile }) => {
+        setUserProfile({ full_name: profile?.full_name ?? email, email })
+      })
+    })
+  }, [])
+
+  const fullName = userProfile?.full_name ?? ''
+  const nameParts = fullName.trim().split(' ')
+  const firstName = nameParts[0] ?? ''
+  const lastInitial = nameParts[1]?.[0] ? ` ${nameParts[1][0]}.` : ''
+  const shortName = firstName + lastInitial
+  const initials = (firstName[0] ?? '') + (nameParts[1]?.[0] ?? '')
+  const userEmail = userProfile?.email ?? ''
 
   const navItems = [
     { id: 'feed' as NavId,     label: 'Feed',        icon: <Icon.Feed /> },
@@ -609,9 +629,9 @@ export default function BuilderDashboard() {
               background:PURPLE+'20', border:`1.5px solid ${PURPLE}50`,
               display:'flex', alignItems:'center', justifyContent:'center',
               fontSize:12, fontWeight:800, color:PURPLE,
-            }}>MN</div>
+            }}>{initials || '?'}</div>
             <div style={{ minWidth:0 }}>
-              <div style={{ fontSize:14, fontWeight:700, color:'#E0E0F0', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>Mahesh N.</div>
+              <div style={{ fontSize:14, fontWeight:700, color:'#E0E0F0', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{shortName || '...'}</div>
               <div style={{
                 marginTop:3, display:'inline-block',
                 background:PURPLE+'15', border:`0.5px solid ${PURPLE}30`,
@@ -741,7 +761,7 @@ export default function BuilderDashboard() {
               background:PURPLE+'22', border:`2px solid ${PURPLE}45`,
               display:'flex', alignItems:'center', justifyContent:'center',
               fontSize:12, fontWeight:800, color:PURPLE,
-            }}>MN</div>
+            }}>{initials || '?'}</div>
           </div>
         </div>
 
@@ -752,7 +772,7 @@ export default function BuilderDashboard() {
             <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
               <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8 }}>
                 <p style={{ fontSize:14, color:'#6060A0' }}>
-                  Good morning, Mahesh 👋 — <span style={{ color:PURPLE, fontWeight:600 }}>3 new projects match your skills</span>
+                  Good morning, {firstName || 'there'} 👋 — <span style={{ color:PURPLE, fontWeight:600 }}>3 new projects match your skills</span>
                 </p>
                 <div style={{ display:'flex', gap:7 }}>
                   {['All','Building','MVP','Idea'].map(f => (
@@ -1001,16 +1021,16 @@ export default function BuilderDashboard() {
                   display:'flex', alignItems:'center', justifyContent:'center',
                   fontSize:16, fontWeight:800, color:PURPLE,
                   fontFamily:"'Cabinet Grotesk',sans-serif",
-                }}>MN</div>
+                }}>{initials || '?'}</div>
                 <div style={{ flex:1 }}>
-                  <div style={{ fontSize:20, fontWeight:800, color:'#F0F0F8', fontFamily:"'Cabinet Grotesk',sans-serif", marginBottom:5 }}>Mahesh Neupane</div>
+                  <div style={{ fontSize:20, fontWeight:800, color:'#F0F0F8', fontFamily:"'Cabinet Grotesk',sans-serif", marginBottom:5 }}>{fullName || '...'}</div>
                   <div style={{ display:'flex', gap:8, alignItems:'center' }}>
                     <span style={{
                       background:PURPLE+'15', border:`0.5px solid ${PURPLE}30`,
                       borderRadius:999, padding:'2px 9px',
                       fontSize:10, fontWeight:700, color:PURPLE,
                     }}>Builder</span>
-                    <span style={{ fontSize:12, color:'#40405A' }}>maheshneupane96@gmail.com</span>
+                    <span style={{ fontSize:12, color:'#40405A' }}>{userEmail}</span>
                   </div>
                 </div>
                 <button style={{
