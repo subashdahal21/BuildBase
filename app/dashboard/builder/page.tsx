@@ -138,6 +138,9 @@ const Icon = {
   Back:     () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>,
   Check:    () => <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>,
   Plus:     () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>,
+  Crown:    () => <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2 19h20v2H2zM2 7l5 7 5-7 5 7 5-7v10H2V7z" opacity="0.85"/></svg>,
+  Zap:      () => <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
+  ArrowUp:  () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>,
 }
 
 function Logo() {
@@ -590,60 +593,60 @@ export default function BuilderDashboard() {
 
       {/* SIDEBAR */}
       <aside style={{
-        width:220, height:'100vh', background:'#0D0D15',
+        width:236, height:'100vh', background:'#0D0D15',
         borderRight:'0.5px solid rgba(255,255,255,0.05)',
         display:'flex', flexDirection:'column', flexShrink:0,
       }}>
-        <div style={{ padding:'20px 16px 16px', display:'flex', alignItems:'center', gap:9 }}>
+        <div style={{ padding:'22px 18px 18px', display:'flex', alignItems:'center', gap:10 }}>
           <Logo />
-          <span style={{ fontFamily:"'Cabinet Grotesk',sans-serif", fontSize:16, fontWeight:800, color:'#F0F0F8' }}>Buildbase</span>
+          <span style={{ fontFamily:"'Cabinet Grotesk',sans-serif", fontSize:18, fontWeight:800, color:'#F0F0F8' }}>Buildbase</span>
         </div>
 
         <div style={{ padding:'12px 16px 14px', borderBottom:'0.5px solid rgba(255,255,255,0.05)' }}>
-          <div style={{ display:'flex', alignItems:'center', gap:9 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:10 }}>
             <div style={{
-              width:34, height:34, borderRadius:'50%', flexShrink:0,
-              background:PURPLE+'20', border:`1.5px solid ${PURPLE}45`,
+              width:38, height:38, borderRadius:'50%', flexShrink:0,
+              background:PURPLE+'20', border:`1.5px solid ${PURPLE}50`,
               display:'flex', alignItems:'center', justifyContent:'center',
-              fontSize:11, fontWeight:700, color:PURPLE,
+              fontSize:12, fontWeight:800, color:PURPLE,
             }}>MN</div>
             <div style={{ minWidth:0 }}>
-              <div style={{ fontSize:13, fontWeight:600, color:'#E0E0F0', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>Mahesh N.</div>
+              <div style={{ fontSize:14, fontWeight:700, color:'#E0E0F0', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>Mahesh N.</div>
               <div style={{
                 marginTop:3, display:'inline-block',
                 background:PURPLE+'15', border:`0.5px solid ${PURPLE}30`,
-                borderRadius:999, padding:'1px 8px',
-                fontSize:10, fontWeight:600, color:PURPLE,
+                borderRadius:999, padding:'2px 9px',
+                fontSize:10, fontWeight:700, color:PURPLE,
               }}>Builder</div>
             </div>
           </div>
         </div>
 
-        <nav style={{ flex:1, padding:'8px 8px', overflowY:'auto' }}>
+        <nav style={{ flex:1, padding:'10px 8px', overflowY:'auto' }}>
           {navItems.map(item => {
             const active = activeNav === item.id
             return (
               <button key={item.id} onClick={() => setActiveNav(item.id)} style={{
-                display:'flex', alignItems:'center', gap:9,
-                width:'100%', padding:'9px 10px',
-                background: active ? PURPLE+'12' : 'transparent',
+                display:'flex', alignItems:'center', gap:10,
+                width:'100%', padding:'10px 12px',
+                background: active ? PURPLE+'14' : 'transparent',
                 border:'none', borderLeft:`2px solid ${active ? PURPLE : 'transparent'}`,
-                borderRadius:'0 9px 9px 0',
+                borderRadius:'0 10px 10px 0',
                 color: active ? '#F0F0F8' : '#50508A',
-                fontSize:13, fontWeight: active ? 500 : 400,
+                fontSize:14, fontWeight: active ? 600 : 400,
                 cursor:'pointer', textAlign:'left',
                 fontFamily:"'DM Sans',sans-serif",
-                marginBottom:1, transition:'all 0.15s',
+                marginBottom:2, transition:'all 0.15s',
                 position:'relative',
               }}>
-                <span style={{ flexShrink:0, display:'flex', opacity: active ? 1 : 0.6 }}>{item.icon}</span>
+                <span style={{ flexShrink:0, display:'flex', opacity: active ? 1 : 0.55 }}>{item.icon}</span>
                 {item.label}
                 {'badge' in item && item.badge && (
                   <span style={{
-                    marginLeft:'auto', width:17, height:17, borderRadius:'50%',
+                    marginLeft:'auto', width:18, height:18, borderRadius:'50%',
                     background:PURPLE, color:'#fff',
                     display:'flex', alignItems:'center', justifyContent:'center',
-                    fontSize:9, fontWeight:700,
+                    fontSize:10, fontWeight:700,
                   }}>{item.badge}</span>
                 )}
               </button>
@@ -651,12 +654,39 @@ export default function BuilderDashboard() {
           })}
         </nav>
 
-        <div style={{ padding:'8px 8px', borderTop:'0.5px solid rgba(255,255,255,0.04)' }}>
+        {/* UPGRADE BUTTON */}
+        <div style={{ padding:'12px 12px 8px' }}>
           <button style={{
-            display:'flex', alignItems:'center', gap:9,
-            width:'100%', padding:'9px 10px',
+            width:'100%', padding:'13px 14px', borderRadius:14, border:'none', cursor:'pointer',
+            background:'linear-gradient(135deg, #F59E0B 0%, #EF4444 50%, #7C5CFC 100%)',
+            position:'relative', overflow:'hidden', fontFamily:"'DM Sans',sans-serif",
+            boxShadow:'0 4px 24px rgba(245,158,11,0.28), 0 2px 8px rgba(124,92,252,0.22)',
+          }}>
+            <div style={{
+              position:'absolute', inset:0, opacity:0.12,
+              background:'radial-gradient(circle at 30% 50%, #fff 0%, transparent 70%)',
+            }}/>
+            <div style={{ position:'relative', display:'flex', alignItems:'center', gap:9 }}>
+              <span style={{ fontSize:18, lineHeight:1 }}>👑</span>
+              <div style={{ textAlign:'left', flex:1 }}>
+                <div style={{ fontSize:13, fontWeight:800, color:'#fff', letterSpacing:'-0.2px', lineHeight:1.2 }}>
+                  Upgrade to Investor
+                </div>
+                <div style={{ fontSize:10, color:'rgba(255,255,255,0.75)', marginTop:2, fontWeight:400 }}>
+                  Access deal flow & analytics
+                </div>
+              </div>
+              <span style={{ color:'rgba(255,255,255,0.9)', display:'flex', flexShrink:0 }}><Icon.ArrowUp /></span>
+            </div>
+          </button>
+        </div>
+
+        <div style={{ padding:'6px 8px 8px', borderTop:'0.5px solid rgba(255,255,255,0.04)' }}>
+          <button style={{
+            display:'flex', alignItems:'center', gap:10,
+            width:'100%', padding:'9px 12px',
             background:'transparent', border:'none',
-            borderLeft:'2px solid transparent', borderRadius:'0 9px 9px 0',
+            borderLeft:'2px solid transparent', borderRadius:'0 10px 10px 0',
             color:'#40405A', fontSize:13, cursor:'pointer',
             fontFamily:"'DM Sans',sans-serif",
           }}>
@@ -671,46 +701,46 @@ export default function BuilderDashboard() {
 
         {/* Topbar */}
         <div style={{
-          padding:'0 28px', height:56,
+          padding:'0 28px', height:64,
           borderBottom:'0.5px solid rgba(255,255,255,0.05)',
           display:'flex', alignItems:'center', justifyContent:'space-between',
           flexShrink:0,
         }}>
           <h1 style={{
             fontFamily:"'Cabinet Grotesk',sans-serif",
-            fontSize:17, fontWeight:800, color:'#F0F0F8', letterSpacing:'-0.2px',
+            fontSize:22, fontWeight:800, color:'#F0F0F8', letterSpacing:'-0.4px',
           }}>{PAGE_TITLE[activeNav]}</h1>
-          <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:10 }}>
             <div style={{
               display:'flex', alignItems:'center', gap:8,
-              background:'#111118', border:'0.5px solid rgba(255,255,255,0.07)',
-              borderRadius:9, padding:'6px 12px',
+              background:'#111118', border:'0.5px solid rgba(255,255,255,0.08)',
+              borderRadius:10, padding:'8px 14px',
             }}>
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#40405A" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#40405A" strokeWidth="2" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
               <input placeholder="Search projects..." style={{
                 background:'none', border:'none', outline:'none',
-                fontSize:12, color:'#F0F0F8', width:150,
+                fontSize:13, color:'#F0F0F8', width:160,
                 fontFamily:"'DM Sans',sans-serif",
               }}/>
             </div>
             <button style={{
-              width:34, height:34, borderRadius:9,
-              background:'#111118', border:'0.5px solid rgba(255,255,255,0.07)',
+              width:38, height:38, borderRadius:10,
+              background:'#111118', border:'0.5px solid rgba(255,255,255,0.08)',
               display:'flex', alignItems:'center', justifyContent:'center',
               color:'#50508A', cursor:'pointer', position:'relative',
             }}>
               <Icon.Bell />
               <div style={{
-                position:'absolute', top:7, right:7,
-                width:5, height:5, borderRadius:'50%',
+                position:'absolute', top:8, right:8,
+                width:6, height:6, borderRadius:'50%',
                 background:PURPLE, border:'1.5px solid #0C0C12',
               }}/>
             </button>
             <div style={{
-              width:34, height:34, borderRadius:'50%',
-              background:PURPLE+'20', border:`1.5px solid ${PURPLE}40`,
+              width:38, height:38, borderRadius:'50%',
+              background:PURPLE+'22', border:`2px solid ${PURPLE}45`,
               display:'flex', alignItems:'center', justifyContent:'center',
-              fontSize:11, fontWeight:700, color:PURPLE,
+              fontSize:12, fontWeight:800, color:PURPLE,
             }}>MN</div>
           </div>
         </div>
@@ -720,18 +750,18 @@ export default function BuilderDashboard() {
           {/* FEED */}
           {activeNav === 'feed' && (
             <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
-              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:4 }}>
-                <p style={{ fontSize:13, color:'#50508A' }}>
-                  Good morning, Mahesh 👋 — <span style={{ color:PURPLE }}>3 new projects match your skills</span>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8 }}>
+                <p style={{ fontSize:14, color:'#6060A0' }}>
+                  Good morning, Mahesh 👋 — <span style={{ color:PURPLE, fontWeight:600 }}>3 new projects match your skills</span>
                 </p>
                 <div style={{ display:'flex', gap:7 }}>
                   {['All','Building','MVP','Idea'].map(f => (
                     <button key={f} style={{
-                      padding:'4px 11px', borderRadius:999,
+                      padding:'5px 13px', borderRadius:999,
                       border:'0.5px solid rgba(255,255,255,0.08)',
                       background: f==='All' ? PURPLE+'15' : 'transparent',
                       color: f==='All' ? PURPLE : '#50508A',
-                      fontSize:11, fontWeight:500, cursor:'pointer',
+                      fontSize:12, fontWeight:600, cursor:'pointer',
                       fontFamily:"'DM Sans',sans-serif",
                     }}>{f}</button>
                   ))}
@@ -746,8 +776,8 @@ export default function BuilderDashboard() {
           {/* COLLAB */}
           {activeNav === 'collab' && (
             <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
-              <p style={{ fontSize:13, color:'#50508A', marginBottom:4 }}>
-                <span style={{ color:PURPLE }}>2 roles matched</span> to your profile by AI
+              <p style={{ fontSize:14, color:'#60608A', marginBottom:8 }}>
+                <span style={{ color:PURPLE, fontWeight:600 }}>2 roles matched</span> to your profile by AI
               </p>
               {COLLAB_REQUESTS.map(r => (
                 <CollabRow key={r.id} req={r} />
@@ -973,7 +1003,7 @@ export default function BuilderDashboard() {
                   fontFamily:"'Cabinet Grotesk',sans-serif",
                 }}>MN</div>
                 <div style={{ flex:1 }}>
-                  <div style={{ fontSize:18, fontWeight:800, color:'#F0F0F8', fontFamily:"'Cabinet Grotesk',sans-serif", marginBottom:5 }}>Mahesh Neupane</div>
+                  <div style={{ fontSize:20, fontWeight:800, color:'#F0F0F8', fontFamily:"'Cabinet Grotesk',sans-serif", marginBottom:5 }}>Mahesh Neupane</div>
                   <div style={{ display:'flex', gap:8, alignItems:'center' }}>
                     <span style={{
                       background:PURPLE+'15', border:`0.5px solid ${PURPLE}30`,
@@ -1029,34 +1059,86 @@ export default function BuilderDashboard() {
 
       {/* RIGHT RAIL */}
       <aside style={{
-        width:248, height:'100vh', background:'#0D0D15',
+        width:264, height:'100vh', background:'#0D0D15',
         borderLeft:'0.5px solid rgba(255,255,255,0.05)',
-        overflowY:'auto', padding:'20px 14px',
+        overflowY:'auto', padding:'22px 16px',
         display:'flex', flexDirection:'column', gap:22, flexShrink:0,
       }}>
+
+        {/* Investor upgrade card */}
+        <div style={{
+          borderRadius:16, overflow:'hidden',
+          background:'linear-gradient(145deg, #1A1030 0%, #120C28 100%)',
+          border:'0.5px solid rgba(245,158,11,0.25)',
+          boxShadow:'0 0 28px rgba(245,158,11,0.08)',
+          padding:'18px 16px',
+          position:'relative',
+        }}>
+          <div style={{
+            position:'absolute', top:0, right:0,
+            width:80, height:80,
+            background:'radial-gradient(circle, rgba(245,158,11,0.15) 0%, transparent 70%)',
+          }}/>
+          <div style={{ fontSize:24, marginBottom:8 }}>👑</div>
+          <div style={{ fontSize:15, fontWeight:800, color:'#F0F0F8', fontFamily:"'Cabinet Grotesk',sans-serif", marginBottom:5, lineHeight:1.3 }}>
+            Unlock Investor<br/>Account
+          </div>
+          <div style={{ fontSize:12, color:'#8070B0', lineHeight:1.6, marginBottom:14 }}>
+            See full deal flow, financial metrics & reach out to founders directly.
+          </div>
+          <div style={{ display:'flex', flexDirection:'column', gap:6, marginBottom:16 }}>
+            {['Full deal-flow access','Founder direct messaging','Advanced AI analytics'].map(f => (
+              <div key={f} style={{ display:'flex', alignItems:'center', gap:7 }}>
+                <div style={{
+                  width:16, height:16, borderRadius:'50%', flexShrink:0,
+                  background:'rgba(245,158,11,0.15)', border:'0.5px solid rgba(245,158,11,0.35)',
+                  display:'flex', alignItems:'center', justifyContent:'center',
+                }}>
+                  <Icon.Check />
+                </div>
+                <span style={{ fontSize:11, color:'#B0A0D0', fontWeight:400 }}>{f}</span>
+              </div>
+            ))}
+          </div>
+          <button style={{
+            width:'100%', padding:'11px', borderRadius:11, border:'none', cursor:'pointer',
+            background:'linear-gradient(135deg, #F59E0B 0%, #EF4444 100%)',
+            color:'#fff', fontSize:13, fontWeight:800,
+            fontFamily:"'DM Sans',sans-serif",
+            boxShadow:'0 4px 16px rgba(245,158,11,0.35)',
+            letterSpacing:'-0.1px',
+            display:'flex', alignItems:'center', justifyContent:'center', gap:7,
+          }}>
+            <span style={{ fontSize:15 }}>⚡</span>
+            Upgrade Now
+          </button>
+        </div>
+
+        <div style={{ height:'0.5px', background:'rgba(255,255,255,0.04)' }}/>
+
         <section>
-          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:11 }}>
-            <span style={{ fontSize:12, fontWeight:600, color:'#C0C0D8' }}>Suggested</span>
-            <span style={{ fontSize:11, color:PURPLE, cursor:'pointer' }}>See all</span>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:12 }}>
+            <span style={{ fontSize:13, fontWeight:700, color:'#C0C0D8' }}>Suggested</span>
+            <span style={{ fontSize:12, color:PURPLE, cursor:'pointer', fontWeight:500 }}>See all</span>
           </div>
           <div style={{ display:'flex', flexDirection:'column', gap:7 }}>
             {SUGGESTED.map(s => (
               <div key={s.name} style={{
-                display:'flex', alignItems:'center', gap:9, padding:'9px 11px',
+                display:'flex', alignItems:'center', gap:10, padding:'10px 12px',
                 background:'#111118', border:'0.5px solid rgba(255,255,255,0.05)',
-                borderRadius:10, cursor:'pointer',
+                borderRadius:11, cursor:'pointer',
               }}>
                 <div style={{
-                  width:30, height:30, borderRadius:'50%', flexShrink:0,
+                  width:32, height:32, borderRadius:'50%', flexShrink:0,
                   background:s.color+'18', border:`1px solid ${s.color}30`,
                   display:'flex', alignItems:'center', justifyContent:'center',
-                  fontSize:9, fontWeight:700, color:s.color,
+                  fontSize:10, fontWeight:700, color:s.color,
                 }}>{s.initials}</div>
                 <div style={{ flex:1, minWidth:0 }}>
-                  <div style={{ fontSize:12, fontWeight:600, color:'#E0E0F0' }}>{s.name}</div>
-                  <div style={{ fontSize:10, color:'#50508A' }}>{s.role}</div>
+                  <div style={{ fontSize:13, fontWeight:600, color:'#E0E0F0' }}>{s.name}</div>
+                  <div style={{ fontSize:11, color:'#50508A' }}>{s.role}</div>
                 </div>
-                <span style={{ fontSize:10, fontWeight:700, color:'#10B981' }}>{s.match}%</span>
+                <span style={{ fontSize:11, fontWeight:700, color:'#10B981' }}>{s.match}%</span>
               </div>
             ))}
           </div>
@@ -1065,20 +1147,20 @@ export default function BuilderDashboard() {
         <div style={{ height:'0.5px', background:'rgba(255,255,255,0.04)' }}/>
 
         <section>
-          <div style={{ fontSize:12, fontWeight:600, color:'#C0C0D8', marginBottom:11 }}>Trending</div>
+          <div style={{ fontSize:13, fontWeight:700, color:'#C0C0D8', marginBottom:12 }}>Trending</div>
           <div style={{ display:'flex', flexDirection:'column', gap:1 }}>
             {TRENDING.map((t, i) => (
               <div key={t.name} style={{
                 display:'flex', alignItems:'center', justifyContent:'space-between',
-                padding:'7px 8px', borderRadius:8, cursor:'pointer',
+                padding:'8px 8px', borderRadius:9, cursor:'pointer',
               }}>
-                <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-                  <span style={{ fontSize:10, color:'#30305A', width:13, textAlign:'center' }}>{i+1}</span>
-                  <span style={{ fontSize:12, color:'#B0B0C8' }}>{t.name}</span>
+                <div style={{ display:'flex', alignItems:'center', gap:9 }}>
+                  <span style={{ fontSize:11, color:'#30305A', width:14, textAlign:'center', fontWeight:600 }}>{i+1}</span>
+                  <span style={{ fontSize:13, color:'#B0B0C8' }}>{t.name}</span>
                 </div>
                 <span style={{
                   fontSize:10, fontWeight:600, color:t.color,
-                  background:t.color+'12', borderRadius:999, padding:'2px 7px',
+                  background:t.color+'12', borderRadius:999, padding:'2px 8px',
                 }}>{t.tag}</span>
               </div>
             ))}
@@ -1096,74 +1178,75 @@ function ProjectRow({ project, onView }: { project: typeof PROJECTS[0]; onView: 
   return (
     <div style={{
       background:'#111118', border:'0.5px solid rgba(255,255,255,0.06)',
-      borderRadius:14, padding:'16px 18px', transition:'border-color 0.2s',
+      borderRadius:16, padding:'18px 20px', transition:'all 0.2s',
     }}
-      onMouseEnter={e => (e.currentTarget.style.borderColor = PURPLE+'25')}
-      onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)')}
+      onMouseEnter={e => { e.currentTarget.style.borderColor = PURPLE+'30'; e.currentTarget.style.background = '#131320' }}
+      onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)'; e.currentTarget.style.background = '#111118' }}
     >
-      <div style={{ display:'flex', alignItems:'flex-start', gap:13, marginBottom:12 }}>
+      <div style={{ display:'flex', alignItems:'flex-start', gap:14, marginBottom:13 }}>
         <div style={{
-          width:40, height:40, borderRadius:11, flexShrink:0,
-          background:project.color+'18', border:`1px solid ${project.color}25`,
+          width:44, height:44, borderRadius:12, flexShrink:0,
+          background:project.color+'18', border:`1px solid ${project.color}30`,
           display:'flex', alignItems:'center', justifyContent:'center',
-          fontSize:11, fontWeight:800, color:project.color,
+          fontSize:12, fontWeight:800, color:project.color,
           fontFamily:"'Cabinet Grotesk',sans-serif",
         }}>{project.initials}</div>
         <div style={{ flex:1, minWidth:0 }}>
-          <div style={{ display:'flex', alignItems:'center', gap:9, marginBottom:4 }}>
-            <h3 style={{ fontFamily:"'Cabinet Grotesk',sans-serif", fontSize:15, fontWeight:800, color:'#F0F0F8' }}>
+          <div style={{ display:'flex', alignItems:'center', gap:9, marginBottom:5 }}>
+            <h3 style={{ fontFamily:"'Cabinet Grotesk',sans-serif", fontSize:17, fontWeight:800, color:'#F0F0F8' }}>
               {project.name}
             </h3>
-            <span style={{ fontSize:10, fontWeight:600, color:stg.color, background:stg.bg, borderRadius:999, padding:'2px 8px' }}>
+            <span style={{ fontSize:11, fontWeight:600, color:stg.color, background:stg.bg, borderRadius:999, padding:'2px 9px' }}>
               {project.stage}
             </span>
           </div>
-          <p style={{ fontSize:13, color:'#6060A0', lineHeight:1.5, fontWeight:300 }}>{project.desc}</p>
+          <p style={{ fontSize:13, color:'#6060A0', lineHeight:1.6 }}>{project.desc}</p>
         </div>
         <Sparkline data={project.commitHistory} color={project.color} />
       </div>
 
-      <div style={{ display:'flex', gap:7, marginBottom:12, flexWrap:'wrap', alignItems:'center' }}>
-        <span style={{ fontSize:10, color:PURPLE, display:'flex', alignItems:'center', gap:3 }}>
-          <Icon.Sparkle /> AI
+      <div style={{ display:'flex', gap:7, marginBottom:13, flexWrap:'wrap', alignItems:'center' }}>
+        <span style={{ fontSize:11, color:PURPLE, display:'flex', alignItems:'center', gap:3, fontWeight:600 }}>
+          <Icon.Sparkle /> AI match
         </span>
         {project.techStack.map(t => (
           <span key={t} style={{
             fontSize:11, color:'#7070A0', background:'#16161F',
-            border:'0.5px solid rgba(255,255,255,0.06)',
-            borderRadius:6, padding:'3px 8px',
+            border:'0.5px solid rgba(255,255,255,0.07)',
+            borderRadius:7, padding:'3px 9px',
           }}>{t}</span>
         ))}
-        <div style={{ marginLeft:'auto', display:'flex', alignItems:'center', gap:4 }}>
+        <div style={{ marginLeft:'auto', display:'flex', alignItems:'center', gap:5 }}>
           <span style={{ color:'#40405A', display:'flex' }}><Icon.Git /></span>
-          <span style={{ fontSize:11, color:'#40405A' }}>{project.commits}</span>
-          <span style={{ color:'#F59E0B', display:'flex', marginLeft:6 }}><Icon.Star /></span>
-          <span style={{ fontSize:11, color:'#40405A' }}>{project.stars}</span>
+          <span style={{ fontSize:12, color:'#50508A' }}>{project.commits}</span>
+          <span style={{ color:'#F59E0B', display:'flex', marginLeft:7 }}><Icon.Star /></span>
+          <span style={{ fontSize:12, color:'#50508A' }}>{project.stars}</span>
         </div>
       </div>
 
       <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-        <div style={{ display:'flex', alignItems:'center', gap:7 }}>
+        <div style={{ display:'flex', alignItems:'center', gap:8 }}>
           <div style={{
-            width:24, height:24, borderRadius:'50%',
+            width:26, height:26, borderRadius:'50%',
             background:project.author.color+'20', border:`1px solid ${project.author.color}40`,
             display:'flex', alignItems:'center', justifyContent:'center',
-            fontSize:8, fontWeight:700, color:project.author.color,
+            fontSize:9, fontWeight:700, color:project.author.color,
           }}>{project.author.initials}</div>
-          <span style={{ fontSize:12, color:'#6060A0' }}>{project.author.name}</span>
+          <span style={{ fontSize:13, color:'#6060A0' }}>{project.author.name}</span>
         </div>
-        <div style={{ display:'flex', gap:7 }}>
+        <div style={{ display:'flex', gap:8 }}>
           <button onClick={onView} style={{
-            padding:'6px 13px', borderRadius:8,
+            padding:'7px 15px', borderRadius:9,
             background:'transparent', border:`0.5px solid ${PURPLE}40`,
-            color:PURPLE, fontSize:12, fontWeight:600, cursor:'pointer',
+            color:PURPLE, fontSize:13, fontWeight:600, cursor:'pointer',
             fontFamily:"'DM Sans',sans-serif",
           }}>View</button>
           <button onClick={onView} style={{
-            padding:'6px 13px', borderRadius:8,
+            padding:'7px 15px', borderRadius:9,
             background:PURPLE, border:'none',
-            color:'#fff', fontSize:12, fontWeight:600, cursor:'pointer',
+            color:'#fff', fontSize:13, fontWeight:700, cursor:'pointer',
             fontFamily:"'DM Sans',sans-serif",
+            boxShadow:`0 2px 12px ${PURPLE}40`,
           }}>Request to Join</button>
         </div>
       </div>
