@@ -598,7 +598,7 @@ export default function CreateProjectPage() {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                       {collaborators.map((c, idx) => {
                         const color = roleColor(c.role)
-                        const scorePercent = Math.min(100, Math.round((c.score / 20) * 100))
+                        const scorePercent = c.score
                         return (
                           <div key={c.id} className="collab-card" style={{
                             background: '#14141C', border: '0.5px solid rgba(255,255,255,0.06)',

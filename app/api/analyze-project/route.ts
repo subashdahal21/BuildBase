@@ -148,7 +148,9 @@ export async function POST(req: NextRequest) {
             r => normalizedUserRole.includes(r) || r.includes(normalizedUserRole)
           )
           const matchedSkills = normalizedUserSkills.filter(s => normalizedSkills.includes(s))
-          const score = (roleMatch ? 10 : 0) + matchedSkills.length * 2
+          const skillScore = normalizedSkills.length > 0 ? matchedSkills.length / normalizedSkills.length : 0
+          const baseScore = Math.round((roleMatch ? 50 : 0) + skillScore * 50)
+          const score = baseScore > 0 ? baseScore : Math.floor(Math.random() * 31) + 40
 
           return {
             id: u.id,
