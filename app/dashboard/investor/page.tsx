@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 
-type NavId = 'dealflow' | 'portfolio' | 'saved' | 'messages' | 'profile'
+type NavId = 'dealflow' | 'portfolio' | 'saved' | 'messages' | 'profile' | 'discover'
 type ProjectTab = 'overview' | 'team' | 'commits' | 'invest' | 'messages'
 
 const ACCENT = '#F59E0B'
@@ -93,6 +93,141 @@ const MESSAGES_DATA = [
   ]},
 ]
 
+const ALL_STARTUPS = [
+  ...STARTUPS,
+  {
+    id: 4, name: 'GreenChain', initials: 'GC', color: '#10B981',
+    tagline: 'Blockchain-based carbon credit marketplace for SMEs.',
+    sector: 'CleanTech', stage: 'Pre-seed', ask: '$300K', valuation: '$1.8M',
+    traction: '120 companies', growth: '+25% MoM', aiMatch: 0,
+    github: 'greenchain/core', commits: 210, stars: 88,
+    openRoles: ['Blockchain Dev', 'BD Lead'],
+    description: 'GreenChain makes carbon offsetting accessible for small businesses by creating a transparent blockchain marketplace where SMEs can buy, sell, and verify carbon credits in real time.',
+    founders: [{ initials: 'LM', name: 'Lara M.', role: 'CEO', color: '#10B981', commits: 145 }],
+    team: [],
+    commitHistory: [4, 6, 5, 9, 8, 13, 11, 16, 14, 19, 17, 22, 20, 25],
+    techStack: ['Solidity', 'React', 'Node.js', 'PostgreSQL', 'IPFS'],
+    milestones: [
+      { label: 'Smart contract audit', date: 'Feb 2025', done: true },
+      { label: '100 SME signups', date: 'Apr 2025', done: false },
+    ],
+  },
+  {
+    id: 5, name: 'MedBot', initials: 'MB', color: '#3B82F6',
+    tagline: 'AI-powered clinical note assistant for doctors and nurses.',
+    sector: 'HealthTech', stage: 'Seed', ask: '$750K', valuation: '$4.5M',
+    traction: '800 clinicians', growth: '+40% MoM', aiMatch: 0,
+    github: 'medbot/platform', commits: 543, stars: 201,
+    openRoles: ['ML Engineer', 'HIPAA Compliance Lead'],
+    description: 'MedBot reduces physician burnout by auto-generating clinical notes from voice using fine-tuned LLMs, cutting documentation time by 70% per shift.',
+    founders: [
+      { initials: 'RK', name: 'Dr. R. Khan', role: 'CEO', color: '#3B82F6', commits: 310 },
+      { initials: 'TS', name: 'T. Singh', role: 'CTO', color: '#7C5CFC', commits: 233 },
+    ],
+    team: [],
+    commitHistory: [10, 14, 12, 20, 18, 26, 24, 30, 28, 36, 32, 40, 38, 46],
+    techStack: ['Python', 'FastAPI', 'Whisper', 'GPT-4', 'React Native'],
+    milestones: [
+      { label: 'HIPAA compliant', date: 'Jan 2025', done: true },
+      { label: 'Hospital pilot', date: 'May 2025', done: false },
+    ],
+  },
+  {
+    id: 6, name: 'RetailAI', initials: 'RA', color: '#F59E0B',
+    tagline: 'Predictive inventory and demand forecasting for e-commerce.',
+    sector: 'E-commerce', stage: 'Pre-seed', ask: '$250K', valuation: '$1.5M',
+    traction: '35 stores', growth: '+60% WoW', aiMatch: 0,
+    github: 'retailai/core', commits: 178, stars: 64,
+    openRoles: ['Data Scientist', 'Sales Lead'],
+    description: 'RetailAI gives independent e-commerce stores enterprise-grade demand forecasting, reducing overstock by 30% and stockouts by 45% using proprietary ML models.',
+    founders: [{ initials: 'HN', name: 'Hina N.', role: 'Founder', color: '#F59E0B', commits: 178 }],
+    team: [],
+    commitHistory: [3, 5, 4, 7, 6, 9, 8, 12, 10, 14, 13, 17, 15, 19],
+    techStack: ['Python', 'scikit-learn', 'Next.js', 'Shopify API', 'AWS'],
+    milestones: [
+      { label: 'Beta launched', date: 'Mar 2025', done: true },
+      { label: '100 stores', date: 'Jun 2025', done: false },
+    ],
+  },
+  {
+    id: 7, name: 'LegalBot', initials: 'LB', color: '#7C5CFC',
+    tagline: 'AI contract review and legal Q&A for startups and freelancers.',
+    sector: 'LegalTech', stage: 'Seed', ask: '$600K', valuation: '$3.5M',
+    traction: '3,200 users', growth: '+22% MoM', aiMatch: 0,
+    github: 'legalbot/app', commits: 389, stars: 143,
+    openRoles: ['Legal Counsel', 'Frontend Dev'],
+    description: 'LegalBot makes legal protection affordable. Founders and freelancers get instant contract review, risk flagging, and plain-English explanations in seconds — no lawyer needed.',
+    founders: [
+      { initials: 'CJ', name: 'C. Johnson', role: 'CEO', color: '#7C5CFC', commits: 220 },
+      { initials: 'PW', name: 'P. Wang', role: 'CTO', color: '#10B981', commits: 169 },
+    ],
+    team: [],
+    commitHistory: [8, 10, 9, 14, 12, 18, 16, 21, 19, 25, 22, 28, 26, 30],
+    techStack: ['Next.js', 'Claude API', 'Supabase', 'Stripe', 'PDF.js'],
+    milestones: [
+      { label: 'MVP launched', date: 'Feb 2025', done: true },
+      { label: '5K users', date: 'May 2025', done: false },
+    ],
+  },
+  {
+    id: 8, name: 'AgriSense', initials: 'AS', color: '#10B981',
+    tagline: 'IoT soil monitoring and crop yield prediction for smallholder farmers.',
+    sector: 'AgriTech', stage: 'Pre-seed', ask: '$180K', valuation: '$900K',
+    traction: '200 farms', growth: '+15% MoM', aiMatch: 0,
+    github: 'agrisense/core', commits: 134, stars: 47,
+    openRoles: ['IoT Engineer', 'Field Sales'],
+    description: 'AgriSense deploys affordable soil sensors and an AI dashboard to help smallholder farmers increase yields by 25% through real-time soil health monitoring and personalized crop advice.',
+    founders: [{ initials: 'BM', name: 'B. Mwangi', role: 'CEO', color: '#10B981', commits: 134 }],
+    team: [],
+    commitHistory: [2, 3, 3, 5, 4, 7, 6, 8, 7, 10, 9, 11, 10, 13],
+    techStack: ['Arduino', 'MQTT', 'Python', 'React', 'PostgreSQL'],
+    milestones: [
+      { label: 'Pilot complete', date: 'Jan 2025', done: true },
+      { label: '500 farms', date: 'Jul 2025', done: false },
+    ],
+  },
+]
+
+function scoreStartup(startup: typeof ALL_STARTUPS[0], query: string, sectors: string[], stage: string): number {
+  const q = query.toLowerCase()
+  const tokens = q.split(/\s+/).filter(Boolean)
+  let score = 0
+
+  const haystack = [
+    startup.name, startup.tagline, startup.description,
+    startup.sector, startup.stage, startup.ask, startup.traction,
+    ...startup.techStack, ...(startup.openRoles ?? []),
+  ].join(' ').toLowerCase()
+
+  for (const t of tokens) {
+    if (haystack.includes(t)) score += 10
+  }
+  if (sectors.some(s => startup.sector.toLowerCase().includes(s.toLowerCase()))) score += 25
+  if (stage && startup.stage.toLowerCase().includes(stage.toLowerCase())) score += 20
+
+  const askNum = parseInt(startup.ask.replace(/[^0-9]/g, ''))
+  if (q.includes('pre-seed') && startup.stage === 'Pre-seed') score += 15
+  if (q.includes('seed') && startup.stage === 'Seed') score += 15
+  if ((q.includes('ai') || q.includes('ml')) && (startup.sector === 'AI/ML' || startup.techStack.some(t => ['openai','claude','gpt','whisper','llm','ml','ai'].includes(t.toLowerCase())))) score += 20
+  if (q.includes('health') && startup.sector === 'HealthTech') score += 15
+  if (q.includes('fintech') && startup.sector === 'FinTech') score += 15
+  if (q.includes('legal') && startup.sector === 'LegalTech') score += 15
+  if (q.includes('clean') && startup.sector === 'CleanTech') score += 15
+  if (q.includes('saas') && startup.techStack.some(t => ['supabase','stripe','next.js'].includes(t.toLowerCase()))) score += 10
+
+  const maxAsk = extractMaxAmount(q)
+  if (maxAsk && askNum > maxAsk) score -= 20
+
+  return Math.min(99, Math.max(0, score))
+}
+
+function extractMaxAmount(query: string): number | null {
+  const m = query.match(/under\s*\$?([\d]+)k?/i)
+  if (!m) return null
+  const n = parseInt(m[1])
+  return query.toLowerCase().includes('k') || m[0].toLowerCase().includes('k') ? n * 1000 : n
+}
+
 const STAGE_STYLE: Record<string, { color: string; bg: string }> = {
   'Pre-seed': { color: '#3B82F6', bg: '#3B82F612' },
   'Seed':     { color: '#7C5CFC', bg: '#7C5CFC12' },
@@ -114,6 +249,7 @@ const Icon = {
   Check: () => <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>,
   Sparkle: () => <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L9.5 9.5L2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5L12 2z"/></svg>,
   Back: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>,
+  Discover: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>,
   Settings: () => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>,
 }
 
@@ -653,15 +789,42 @@ export default function InvestorDashboard() {
   const [selectedProject, setSelectedProject] = useState<typeof STARTUPS[0] | null>(null)
   const [msgThread, setMsgThread] = useState<typeof MESSAGES_DATA[0] | null>(null)
   const [newMsg, setNewMsg] = useState('')
-  const [userProfile, setUserProfile] = useState<{ full_name: string; email: string } | null>(null)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchResults, setSearchResults] = useState<(typeof ALL_STARTUPS[0] & { score: number })[]>([])
+  const [isSearching, setIsSearching] = useState(false)
+  const [hasSearched, setHasSearched] = useState(false)
+  const [userProfile, setUserProfile] = useState<{
+    full_name: string; email: string; username: string;
+    location: string; bio: string; company: string; title: string;
+    linkedin: string; website: string; ticket_size: string;
+    stage_preference: string; sectors: string[]; goals: string[];
+  } | null>(null)
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       if (!data.user) return
       const email = data.user.email ?? ''
-      supabase.from('profiles').select('full_name').eq('id', data.user.id).single().then(({ data: profile }) => {
-        setUserProfile({ full_name: profile?.full_name ?? email, email })
-      })
+      supabase.from('profiles')
+        .select('full_name, username, location, bio, company, title, linkedin, website, ticket_size, stage_preference, sectors, goals')
+        .eq('id', data.user.id).single()
+        .then(({ data: p }) => {
+          const rawName = p?.full_name ?? ''
+          const derivedName = rawName || (email ? email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : '')
+          setUserProfile({
+            full_name: derivedName, email,
+            username: p?.username ?? '',
+            location: p?.location ?? '',
+            bio: p?.bio ?? '',
+            company: p?.company ?? '',
+            title: p?.title ?? '',
+            linkedin: p?.linkedin ?? '',
+            website: p?.website ?? '',
+            ticket_size: p?.ticket_size ?? '',
+            stage_preference: p?.stage_preference ?? '',
+            sectors: p?.sectors ?? [],
+            goals: p?.goals ?? [],
+          })
+        })
     })
   }, [])
 
@@ -675,6 +838,7 @@ export default function InvestorDashboard() {
 
   const navItems = [
     { id: 'dealflow' as NavId, label: 'Deal Flow', icon: <Icon.DealFlow /> },
+    { id: 'discover' as NavId, label: 'AI Discover', icon: <Icon.Discover /> },
     { id: 'portfolio' as NavId, label: 'Portfolio', icon: <Icon.Portfolio /> },
     { id: 'saved' as NavId, label: 'Saved', icon: <Icon.Saved /> },
     { id: 'messages' as NavId, label: 'Messages', icon: <Icon.Messages />, badge: 2 },
@@ -682,8 +846,25 @@ export default function InvestorDashboard() {
   ]
 
   const PAGE_TITLE: Record<NavId, string> = {
-    dealflow: 'Deal Flow', portfolio: 'Portfolio',
-    saved: 'Saved', messages: 'Messages', profile: 'Profile',
+    dealflow: 'Deal Flow', discover: 'AI Discover',
+    portfolio: 'Portfolio', saved: 'Saved',
+    messages: 'Messages', profile: 'Profile',
+  }
+
+  const runSearch = () => {
+    if (!searchQuery.trim()) return
+    setIsSearching(true)
+    setTimeout(() => {
+      const sectors = userProfile?.sectors ?? []
+      const stage = userProfile?.stage_preference ?? ''
+      const scored = ALL_STARTUPS.map(s => ({
+        ...s,
+        score: scoreStartup(s, searchQuery, sectors, stage),
+      })).filter(s => s.score > 0).sort((a, b) => b.score - a.score)
+      setSearchResults(scored)
+      setHasSearched(true)
+      setIsSearching(false)
+    }, 1200)
   }
 
   return (
@@ -833,6 +1014,181 @@ export default function InvestorDashboard() {
         </div>
 
         <div style={{ flex: 1, overflowY: 'auto', padding: '22px 28px' }}>
+
+          {/* AI DISCOVER */}
+          {activeNav === 'discover' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+
+              {/* Search Box */}
+              <div style={{
+                background: '#111118', border: '0.5px solid rgba(255,255,255,0.06)',
+                borderRadius: 16, padding: '22px 24px',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill={ACCENT}><path d="M12 2L9.5 9.5L2 12l7.5 2.5L12 22l2.5-7.5L22 12l-7.5-2.5L12 2z"/></svg>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: ACCENT }}>AI-Powered Deal Discovery</span>
+                </div>
+                <p style={{ fontSize: 12, color: '#50508A', marginBottom: 18, lineHeight: 1.5 }}>
+                  Describe what you&apos;re looking for in plain English. Our AI scores every startup against your query and investment preferences.
+                </p>
+
+                <div style={{ position: 'relative', marginBottom: 14 }}>
+                  <input
+                    value={searchQuery}
+                    onChange={e => setSearchQuery(e.target.value)}
+                    onKeyDown={e => e.key === 'Enter' && runSearch()}
+                    placeholder='e.g. "AI startup pre-seed under $500K" or "fintech with strong traction"'
+                    style={{
+                      width: '100%', padding: '13px 48px 13px 16px',
+                      background: '#0D0D15', border: `1px solid ${ACCENT}30`,
+                      borderRadius: 10, color: '#F0F0F8', fontSize: 13,
+                      fontFamily: "'DM Sans', sans-serif", outline: 'none',
+                    }}
+                  />
+                  <button
+                    onClick={runSearch}
+                    style={{
+                      position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)',
+                      padding: '5px 14px', borderRadius: 7,
+                      background: ACCENT, border: 'none',
+                      color: '#000', fontSize: 12, fontWeight: 700,
+                      cursor: 'pointer', fontFamily: "'DM Sans', sans-serif",
+                    }}
+                  >
+                    {isSearching ? '...' : 'Search'}
+                  </button>
+                </div>
+
+                {/* Quick chips */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
+                  <span style={{ fontSize: 11, color: '#40405A', alignSelf: 'center' }}>Try:</span>
+                  {[
+                    'AI/ML pre-seed', 'FinTech seed round', 'under $300K ask',
+                    'health tech', 'high traction', 'SaaS startup',
+                  ].map(chip => (
+                    <button key={chip} onClick={() => { setSearchQuery(chip); }}
+                      style={{
+                        padding: '4px 12px', borderRadius: 999,
+                        background: 'transparent', border: `0.5px solid rgba(255,255,255,0.1)`,
+                        color: '#6060A0', fontSize: 11, cursor: 'pointer',
+                        fontFamily: "'DM Sans', sans-serif",
+                      }}
+                    >{chip}</button>
+                  ))}
+                </div>
+
+                {/* Profile preferences */}
+                {(userProfile?.sectors?.length ?? 0) > 0 && (
+                  <div style={{ marginTop: 14, paddingTop: 14, borderTop: '0.5px solid rgba(255,255,255,0.05)' }}>
+                    <span style={{ fontSize: 11, color: '#40405A', marginRight: 8 }}>Your thesis:</span>
+                    {userProfile!.sectors.map(s => (
+                      <button key={s} onClick={() => setSearchQuery(s)}
+                        style={{
+                          marginRight: 6, padding: '3px 10px', borderRadius: 999,
+                          background: ACCENT + '12', border: `0.5px solid ${ACCENT}30`,
+                          color: ACCENT, fontSize: 11, fontWeight: 600, cursor: 'pointer',
+                          fontFamily: "'DM Sans', sans-serif",
+                        }}
+                      >{s}</button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Loading */}
+              {isSearching && (
+                <div style={{ textAlign: 'center', padding: '40px 0', color: '#50508A', fontSize: 13 }}>
+                  <div style={{ fontSize: 22, marginBottom: 10 }}>🤖</div>
+                  Scoring {ALL_STARTUPS.length} startups against your query...
+                </div>
+              )}
+
+              {/* Results */}
+              {hasSearched && !isSearching && (
+                <>
+                  <div style={{ fontSize: 12, color: '#50508A' }}>
+                    {searchResults.length > 0
+                      ? `Found ${searchResults.length} matching startup${searchResults.length > 1 ? 's' : ''} — sorted by AI match score`
+                      : 'No startups matched your query. Try broader terms.'}
+                  </div>
+
+                  {searchResults.map(s => {
+                    const stg = STAGE_STYLE[s.stage] ?? { color: '#8080A0', bg: '#1A1A25' }
+                    const matchColor = s.score >= 70 ? '#10B981' : s.score >= 40 ? ACCENT : '#6060A0'
+                    return (
+                      <div key={s.id}
+                        onClick={() => setSelectedProject(s as typeof STARTUPS[0])}
+                        style={{
+                          background: '#111118', border: '0.5px solid rgba(255,255,255,0.06)',
+                          borderRadius: 14, padding: '18px 20px', cursor: 'pointer',
+                          transition: 'border-color 0.15s',
+                        }}
+                        onMouseEnter={e => (e.currentTarget.style.borderColor = ACCENT + '30')}
+                        onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)')}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
+                          <div style={{
+                            width: 42, height: 42, borderRadius: 11, flexShrink: 0,
+                            background: s.color + '18', border: `1px solid ${s.color}25`,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontSize: 11, fontWeight: 800, color: s.color,
+                            fontFamily: "'Cabinet Grotesk', sans-serif",
+                          }}>{s.initials}</div>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                              <span style={{ fontFamily: "'Cabinet Grotesk', sans-serif", fontSize: 15, fontWeight: 800, color: '#F0F0F8' }}>{s.name}</span>
+                              <span style={{ fontSize: 10, fontWeight: 600, color: stg.color, background: stg.bg, borderRadius: 999, padding: '2px 8px' }}>{s.stage}</span>
+                              <span style={{ fontSize: 10, fontWeight: 600, color: '#50508A', background: '#1A1A25', borderRadius: 999, padding: '2px 8px' }}>{s.sector}</span>
+                            </div>
+                            <p style={{ fontSize: 12, color: '#6060A0', lineHeight: 1.5, marginBottom: 10 }}>{s.tagline}</p>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 12 }}>
+                              {s.techStack.slice(0, 4).map(t => (
+                                <span key={t} style={{
+                                  fontSize: 10, color: '#8080A0', background: '#1A1A25',
+                                  border: '0.5px solid rgba(255,255,255,0.07)',
+                                  borderRadius: 6, padding: '2px 8px',
+                                }}>{t}</span>
+                              ))}
+                            </div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                              <span style={{ fontSize: 11, color: '#50508A' }}>Ask: <b style={{ color: '#F0F0F8' }}>{s.ask}</b></span>
+                              <span style={{ fontSize: 11, color: '#50508A' }}>Traction: <b style={{ color: '#F0F0F8' }}>{s.traction}</b></span>
+                              <span style={{ fontSize: 11, color: '#50508A' }}>Growth: <b style={{ color: '#10B981' }}>{s.growth}</b></span>
+                            </div>
+                          </div>
+
+                          {/* AI Match Score */}
+                          <div style={{ flexShrink: 0, textAlign: 'center' }}>
+                            <div style={{
+                              width: 52, height: 52, borderRadius: '50%',
+                              border: `2px solid ${matchColor}`,
+                              display: 'flex', flexDirection: 'column',
+                              alignItems: 'center', justifyContent: 'center',
+                            }}>
+                              <span style={{ fontSize: 15, fontWeight: 800, color: matchColor, lineHeight: 1 }}>{s.score}</span>
+                              <span style={{ fontSize: 8, color: '#40405A', marginTop: 1 }}>match</span>
+                            </div>
+                            <div style={{ fontSize: 9, color: '#40405A', marginTop: 4 }}>AI score</div>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </>
+              )}
+
+              {/* Empty state */}
+              {!hasSearched && !isSearching && (
+                <div style={{
+                  textAlign: 'center', padding: '60px 0', color: '#30305A',
+                }}>
+                  <div style={{ fontSize: 40, marginBottom: 14 }}>🔍</div>
+                  <div style={{ fontSize: 14, fontWeight: 600, color: '#40405A', marginBottom: 6 }}>Describe your ideal deal</div>
+                  <div style={{ fontSize: 12, color: '#30305A' }}>AI will score every startup in our network against your query</div>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* DEAL FLOW */}
           {activeNav === 'dealflow' && (
@@ -1043,68 +1399,130 @@ export default function InvestorDashboard() {
           {/* PROFILE */}
           {activeNav === 'profile' && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14, maxWidth: 600 }}>
+              {/* Header Card */}
               <div style={{
                 background: '#111118', border: '0.5px solid rgba(255,255,255,0.06)',
                 borderRadius: 16, padding: '24px',
                 display: 'flex', alignItems: 'center', gap: 18,
               }}>
                 <div style={{
-                  width: 60, height: 60, borderRadius: '50%', flexShrink: 0,
+                  width: 64, height: 64, borderRadius: '50%', flexShrink: 0,
                   background: ACCENT + '20', border: `2px solid ${ACCENT}40`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 18, fontWeight: 800, color: ACCENT,
+                  fontSize: 20, fontWeight: 800, color: ACCENT,
                   fontFamily: "'Cabinet Grotesk', sans-serif",
                 }}>{initials || '?'}</div>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 20, fontWeight: 800, color: '#F0F0F8', fontFamily: "'Cabinet Grotesk', sans-serif", marginBottom: 6 }}>{fullName || '...'}</div>
-                  <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                  <div style={{ fontSize: 22, fontWeight: 800, color: '#F0F0F8', fontFamily: "'Cabinet Grotesk', sans-serif", marginBottom: 4 }}>{fullName || 'No name set'}</div>
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
                     <span style={{
                       background: ACCENT + '15', border: `0.5px solid ${ACCENT}30`,
                       borderRadius: 999, padding: '2px 10px',
                       fontSize: 10, fontWeight: 700, color: ACCENT,
                     }}>Investor</span>
+                    {userProfile?.username && <span style={{ fontSize: 12, color: '#50508A' }}>@{userProfile.username}</span>}
                     <span style={{ fontSize: 12, color: '#40405A' }}>{userEmail}</span>
                   </div>
+                  {(userProfile?.title || userProfile?.company) && (
+                    <div style={{ fontSize: 12, color: '#50508A', marginTop: 5 }}>
+                      {[userProfile.title, userProfile.company].filter(Boolean).join(' @ ')}
+                    </div>
+                  )}
+                  {userProfile?.location && (
+                    <div style={{ fontSize: 12, color: '#50508A', marginTop: 3 }}>📍 {userProfile.location}</div>
+                  )}
                 </div>
-                <button style={{
-                  padding: '7px 16px', borderRadius: 9,
-                  background: 'transparent', border: `0.5px solid ${ACCENT}40`,
-                  color: ACCENT, fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                  fontFamily: "'DM Sans', sans-serif",
-                }}>Edit</button>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10 }}>
-                {[
-                  { label: 'Companies Backed', value: '2', color: ACCENT },
-                  { label: 'Total Deployed', value: '$40K', color: '#10B981' },
-                  { label: 'Avg Ticket', value: '$20K', color: '#7C5CFC' },
-                ].map(s => (
-                  <div key={s.label} style={{
-                    background: '#111118', border: '0.5px solid rgba(255,255,255,0.06)',
-                    borderRadius: 12, padding: '14px', textAlign: 'center',
-                  }}>
-                    <div style={{ fontSize: 20, fontWeight: 800, color: s.color, fontFamily: "'Cabinet Grotesk', sans-serif", marginBottom: 4 }}>{s.value}</div>
-                    <div style={{ fontSize: 11, color: '#40405A' }}>{s.label}</div>
+              {/* Bio */}
+              {userProfile?.bio && (
+                <div style={{
+                  background: '#111118', border: '0.5px solid rgba(255,255,255,0.06)',
+                  borderRadius: 14, padding: '16px 18px',
+                }}>
+                  <div style={{ fontSize: 11, color: '#40405A', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Bio</div>
+                  <div style={{ fontSize: 13, color: '#8080A0', lineHeight: 1.6 }}>{userProfile.bio}</div>
+                </div>
+              )}
+
+              {/* Investment Preferences */}
+              {(userProfile?.ticket_size || userProfile?.stage_preference) && (
+                <div style={{
+                  background: '#111118', border: '0.5px solid rgba(255,255,255,0.06)',
+                  borderRadius: 14, padding: '16px 18px',
+                  display: 'flex', gap: 24,
+                }}>
+                  {userProfile?.ticket_size && (
+                    <div>
+                      <div style={{ fontSize: 11, color: '#40405A', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Ticket Size</div>
+                      <div style={{ fontSize: 15, fontWeight: 700, color: ACCENT }}>{userProfile.ticket_size}</div>
+                    </div>
+                  )}
+                  {userProfile?.stage_preference && (
+                    <div>
+                      <div style={{ fontSize: 11, color: '#40405A', marginBottom: 4, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Stage</div>
+                      <div style={{ fontSize: 15, fontWeight: 700, color: '#10B981' }}>{userProfile.stage_preference}</div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Sectors */}
+              {(userProfile?.sectors?.length ?? 0) > 0 && (
+                <div style={{
+                  background: '#111118', border: '0.5px solid rgba(255,255,255,0.06)',
+                  borderRadius: 14, padding: '16px 18px',
+                }}>
+                  <div style={{ fontSize: 11, color: '#40405A', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Investment Focus</div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                    {userProfile!.sectors.map(s => (
+                      <span key={s} style={{
+                        fontSize: 11, fontWeight: 600, color: ACCENT,
+                        background: ACCENT + '12', border: `0.5px solid ${ACCENT}30`,
+                        borderRadius: 7, padding: '4px 10px',
+                      }}>{s}</span>
+                    ))}
                   </div>
-                ))}
-              </div>
-
-              <div style={{
-                background: '#111118', border: '0.5px solid rgba(255,255,255,0.06)',
-                borderRadius: 14, padding: '18px 20px',
-              }}>
-                <div style={{ fontSize: 11, color: '#40405A', marginBottom: 12, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Investment Focus</div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>
-                  {['AI/ML', 'FinTech', 'EdTech', 'Infrastructure'].map(s => (
-                    <span key={s} style={{
-                      fontSize: 11, fontWeight: 500, color: '#8080A0',
-                      background: '#1A1A25', border: '0.5px solid rgba(255,255,255,0.07)',
-                      borderRadius: 7, padding: '4px 10px',
-                    }}>{s}</span>
-                  ))}
                 </div>
-              </div>
+              )}
+
+              {/* Links */}
+              {(userProfile?.linkedin || userProfile?.website) && (
+                <div style={{
+                  background: '#111118', border: '0.5px solid rgba(255,255,255,0.06)',
+                  borderRadius: 14, padding: '16px 18px', display: 'flex', gap: 16, flexWrap: 'wrap',
+                }}>
+                  {userProfile.linkedin && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 12, color: '#8080A0' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                      {userProfile.linkedin}
+                    </div>
+                  )}
+                  {userProfile.website && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: 12, color: '#8080A0' }}>
+                      🌐 {userProfile.website}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Goals */}
+              {(userProfile?.goals?.length ?? 0) > 0 && (
+                <div style={{
+                  background: '#111118', border: '0.5px solid rgba(255,255,255,0.06)',
+                  borderRadius: 14, padding: '16px 18px',
+                }}>
+                  <div style={{ fontSize: 11, color: '#40405A', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Goals</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+                    {userProfile!.goals.map((g, i) => (
+                      <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                        <div style={{ width: 5, height: 5, borderRadius: '50%', background: ACCENT, marginTop: 5, flexShrink: 0 }} />
+                        <span style={{ fontSize: 13, color: '#8080A0' }}>{g}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 

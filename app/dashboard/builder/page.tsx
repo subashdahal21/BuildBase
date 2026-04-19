@@ -561,15 +561,34 @@ export default function BuilderDashboard() {
   const [selectedProject, setSelectedProject] = useState<typeof PROJECTS[0] | null>(null)
   const [msgThread, setMsgThread] = useState<typeof MESSAGES_LIST[0] | null>(null)
   const [newMsg, setNewMsg] = useState('')
-  const [userProfile, setUserProfile] = useState<{ full_name: string; email: string } | null>(null)
+  const [userProfile, setUserProfile] = useState<{
+    full_name: string; email: string; username: string;
+    location: string; bio: string; github: string; linkedin: string;
+    skills: string[]; interests: string[]; goals: string[];
+  } | null>(null)
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
       if (!data.user) return
       const email = data.user.email ?? ''
-      supabase.from('profiles').select('full_name').eq('id', data.user.id).single().then(({ data: profile }) => {
-        setUserProfile({ full_name: profile?.full_name ?? email, email })
-      })
+      supabase.from('profiles')
+        .select('full_name, username, location, bio, github, linkedin, skills, interests, goals')
+        .eq('id', data.user.id).single()
+        .then(({ data: p }) => {
+          const rawName = p?.full_name ?? ''
+          const derivedName = rawName || (email ? email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : '')
+          setUserProfile({
+            full_name: derivedName, email,
+            username: p?.username ?? '',
+            location: p?.location ?? '',
+            bio: p?.bio ?? '',
+            github: p?.github ?? '',
+            linkedin: p?.linkedin ?? '',
+            skills: p?.skills ?? [],
+            interests: p?.interests ?? [],
+            goals: p?.goals ?? [],
+          })
+        })
     })
   }, [])
 
@@ -1009,69 +1028,124 @@ export default function BuilderDashboard() {
 
           {/* PROFILE */}
           {activeNav === 'profile' && (
-            <div style={{ display:'flex', flexDirection:'column', gap:14, maxWidth:580 }}>
+            <div style={{ display:'flex', flexDirection:'column', gap:14, maxWidth:600 }}>
+              {/* Header Card */}
               <div style={{
                 background:'#111118', border:'0.5px solid rgba(255,255,255,0.06)',
-                borderRadius:16, padding:'22px',
-                display:'flex', alignItems:'center', gap:16,
+                borderRadius:16, padding:'24px',
+                display:'flex', alignItems:'center', gap:18,
               }}>
                 <div style={{
-                  width:56, height:56, borderRadius:'50%', flexShrink:0,
+                  width:64, height:64, borderRadius:'50%', flexShrink:0,
                   background:PURPLE+'20', border:`2px solid ${PURPLE}40`,
                   display:'flex', alignItems:'center', justifyContent:'center',
-                  fontSize:16, fontWeight:800, color:PURPLE,
+                  fontSize:20, fontWeight:800, color:PURPLE,
                   fontFamily:"'Cabinet Grotesk',sans-serif",
                 }}>{initials || '?'}</div>
                 <div style={{ flex:1 }}>
-                  <div style={{ fontSize:20, fontWeight:800, color:'#F0F0F8', fontFamily:"'Cabinet Grotesk',sans-serif", marginBottom:5 }}>{fullName || '...'}</div>
-                  <div style={{ display:'flex', gap:8, alignItems:'center' }}>
+                  <div style={{ fontSize:22, fontWeight:800, color:'#F0F0F8', fontFamily:"'Cabinet Grotesk',sans-serif", marginBottom:4 }}>{fullName || 'No name set'}</div>
+                  <div style={{ display:'flex', gap:8, alignItems:'center', flexWrap:'wrap' }}>
                     <span style={{
                       background:PURPLE+'15', border:`0.5px solid ${PURPLE}30`,
-                      borderRadius:999, padding:'2px 9px',
+                      borderRadius:999, padding:'2px 10px',
                       fontSize:10, fontWeight:700, color:PURPLE,
                     }}>Builder</span>
+                    {userProfile?.username && <span style={{ fontSize:12, color:'#50508A' }}>@{userProfile.username}</span>}
                     <span style={{ fontSize:12, color:'#40405A' }}>{userEmail}</span>
                   </div>
+                  {userProfile?.location && (
+                    <div style={{ fontSize:12, color:'#50508A', marginTop:5 }}>📍 {userProfile.location}</div>
+                  )}
                 </div>
-                <button style={{
-                  padding:'7px 14px', borderRadius:9,
-                  background:'transparent', border:`0.5px solid ${PURPLE}40`,
-                  color:PURPLE, fontSize:12, fontWeight:600, cursor:'pointer',
-                  fontFamily:"'DM Sans',sans-serif",
-                }}>Edit</button>
               </div>
 
-              <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10 }}>
-                {[
-                  { label:'Projects', value:'2', color:PURPLE },
-                  { label:'Collabs', value:'5', color:'#10B981' },
-                  { label:'Commits', value:'238', color:'#F59E0B' },
-                ].map(s => (
-                  <div key={s.label} style={{
-                    background:'#111118', border:'0.5px solid rgba(255,255,255,0.06)',
-                    borderRadius:12, padding:'14px', textAlign:'center',
-                  }}>
-                    <div style={{ fontSize:20, fontWeight:800, color:s.color, fontFamily:"'Cabinet Grotesk',sans-serif", marginBottom:3 }}>{s.value}</div>
-                    <div style={{ fontSize:11, color:'#40405A' }}>{s.label}</div>
+              {/* Bio */}
+              {userProfile?.bio && (
+                <div style={{
+                  background:'#111118', border:'0.5px solid rgba(255,255,255,0.06)',
+                  borderRadius:14, padding:'16px 18px',
+                }}>
+                  <div style={{ fontSize:11, color:'#40405A', marginBottom:8, textTransform:'uppercase', letterSpacing:'0.08em' }}>Bio</div>
+                  <div style={{ fontSize:13, color:'#8080A0', lineHeight:1.6 }}>{userProfile.bio}</div>
+                </div>
+              )}
+
+              {/* Links */}
+              {(userProfile?.github || userProfile?.linkedin) && (
+                <div style={{
+                  background:'#111118', border:'0.5px solid rgba(255,255,255,0.06)',
+                  borderRadius:14, padding:'16px 18px', display:'flex', gap:12,
+                }}>
+                  {userProfile.github && (
+                    <div style={{ display:'flex', alignItems:'center', gap:7, fontSize:12, color:'#8080A0' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                      {userProfile.github}
+                    </div>
+                  )}
+                  {userProfile.linkedin && (
+                    <div style={{ display:'flex', alignItems:'center', gap:7, fontSize:12, color:'#8080A0' }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                      {userProfile.linkedin}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Skills */}
+              {(userProfile?.skills?.length ?? 0) > 0 && (
+                <div style={{
+                  background:'#111118', border:'0.5px solid rgba(255,255,255,0.06)',
+                  borderRadius:14, padding:'16px 18px',
+                }}>
+                  <div style={{ fontSize:11, color:'#40405A', marginBottom:10, textTransform:'uppercase', letterSpacing:'0.08em' }}>Skills</div>
+                  <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
+                    {userProfile!.skills.map(s => (
+                      <span key={s} style={{
+                        fontSize:11, color:PURPLE, background:PURPLE+'12',
+                        border:`0.5px solid ${PURPLE}30`,
+                        borderRadius:7, padding:'4px 10px', fontWeight:600,
+                      }}>{s}</span>
+                    ))}
                   </div>
-                ))}
-              </div>
-
-              <div style={{
-                background:'#111118', border:'0.5px solid rgba(255,255,255,0.06)',
-                borderRadius:14, padding:'16px 18px',
-              }}>
-                <div style={{ fontSize:11, color:'#40405A', marginBottom:10, textTransform:'uppercase', letterSpacing:'0.08em' }}>Skills</div>
-                <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
-                  {['TypeScript','Next.js','Supabase','Python','System Design','PostgreSQL'].map(s => (
-                    <span key={s} style={{
-                      fontSize:11, color:'#8080A0', background:'#1A1A25',
-                      border:'0.5px solid rgba(255,255,255,0.07)',
-                      borderRadius:7, padding:'4px 10px',
-                    }}>{s}</span>
-                  ))}
                 </div>
-              </div>
+              )}
+
+              {/* Interests */}
+              {(userProfile?.interests?.length ?? 0) > 0 && (
+                <div style={{
+                  background:'#111118', border:'0.5px solid rgba(255,255,255,0.06)',
+                  borderRadius:14, padding:'16px 18px',
+                }}>
+                  <div style={{ fontSize:11, color:'#40405A', marginBottom:10, textTransform:'uppercase', letterSpacing:'0.08em' }}>Interests</div>
+                  <div style={{ display:'flex', flexWrap:'wrap', gap:6 }}>
+                    {userProfile!.interests.map(s => (
+                      <span key={s} style={{
+                        fontSize:11, color:'#8080A0', background:'#1A1A25',
+                        border:'0.5px solid rgba(255,255,255,0.07)',
+                        borderRadius:7, padding:'4px 10px',
+                      }}>{s}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Goals */}
+              {(userProfile?.goals?.length ?? 0) > 0 && (
+                <div style={{
+                  background:'#111118', border:'0.5px solid rgba(255,255,255,0.06)',
+                  borderRadius:14, padding:'16px 18px',
+                }}>
+                  <div style={{ fontSize:11, color:'#40405A', marginBottom:10, textTransform:'uppercase', letterSpacing:'0.08em' }}>Goals</div>
+                  <div style={{ display:'flex', flexDirection:'column', gap:7 }}>
+                    {userProfile!.goals.map((g, i) => (
+                      <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:8 }}>
+                        <div style={{ width:5, height:5, borderRadius:'50%', background:PURPLE, marginTop:5, flexShrink:0 }}/>
+                        <span style={{ fontSize:13, color:'#8080A0' }}>{g}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
